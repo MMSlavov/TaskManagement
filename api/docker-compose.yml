@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: taskmanagement-db
+    environment:
+      POSTGRES_USER: taskmanagement_user
+      POSTGRES_PASSWORD: taskmanagement_password
+      POSTGRES_DB: taskmanagement_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskmanagement_user -d taskmanagement_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    container_name: taskmanagement-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=taskmanagement_db;Username=taskmanagement_user;Password=taskmanagement_password;"
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: dotnet watch run --project TaskManagement.csproj --no-launch-profile
+
+volumes:
+  postgres_data:

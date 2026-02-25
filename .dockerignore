@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+dist
+build
+obj
+bin
+.env
+.env.local
+.env.*.local
+.vs
+.vscode
+*.user
+*.suo
+.DS_Store
+!
