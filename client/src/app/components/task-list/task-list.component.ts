@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, combineLatest, of } from 'rxjs';
 import { catchError, distinctUntilChanged, finalize, map, shareReplay, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { TaskService, Task, TaskStatus, PagedResponse } from '../../../core/services/task.service';
+import { TaskService, Task, TaskStatus, PagedResponse } from '../../core/task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -18,7 +18,7 @@ export class TaskListComponent implements OnInit {
   errorMessage$ = new BehaviorSubject<string | null>(null);
   selectedStatus$ = new BehaviorSubject<string | null>(null);
   currentPage$ = new BehaviorSubject<number>(1);
-  pageSize$ = new BehaviorSubject<number>(2);
+  pageSize$ = new BehaviorSubject<number>(10);
   
   pageInfo$ = new BehaviorSubject<{
     totalCount: number;

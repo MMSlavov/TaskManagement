@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export type TaskStatus = 'Todo' | 'In Progress' | 'Done';
 
@@ -42,7 +43,7 @@ export interface PagedResponse<T> {
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'https://localhost:7206/api/tasks';
+  private apiUrl = `${environment.apiUrl}/tasks`;
 
   constructor(private http: HttpClient) { }
 
