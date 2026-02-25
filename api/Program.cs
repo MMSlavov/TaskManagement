@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TaskManagement.Application.Services;
 using TaskManagement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ var connectionString = builder.Configuration["DATABASE_URL"]
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 // Add Swagger (Development only)
 if (builder.Environment.IsDevelopment())
