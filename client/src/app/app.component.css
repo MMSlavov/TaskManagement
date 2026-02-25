@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  height: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+:host ::ng-deep {
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Improved button styling */
+  button {
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  /* Improved input styling */
+  input, textarea {
+    font-family: inherit;
+    font-size: 1rem;
+  }
+}
