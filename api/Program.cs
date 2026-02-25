@@ -9,21 +9,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Configure PostgreSQL with EF Core
-var connectionString = builder.Configuration["DATABASE_URL"]
-    ?? throw new InvalidOperationException("DATABASE_URL environment variable not found");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<ITaskService, TaskService>();
 
-// Add Swagger (Development only)
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSwaggerGen();
 }
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 // Configure HTTP pipeline
 if (app.Environment.IsDevelopment())
@@ -33,7 +37,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
