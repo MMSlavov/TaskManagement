@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, combineLatest, of } from 'rxjs';
 import { catchError, distinctUntilChanged, finalize, map, shareReplay, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { TaskService, Task, TaskStatus, PagedResponse } from '../../core/task.service';
+import { TaskService } from '../../core/task.service';
+import { Task, TaskStatus, PagedResponse } from '../../core/models/task.model';
 
 @Component({
   selector: 'app-task-list',

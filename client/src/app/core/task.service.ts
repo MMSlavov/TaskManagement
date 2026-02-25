@@ -2,41 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export type TaskStatus = 'Todo' | 'In Progress' | 'Done';
-
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  dueDate: string | Date;
-  createdAt: string | Date;
-  updatedAt?: string | Date | null;
-}
-
-export interface TaskUpsertInput {
-  title: string;
-  description: string;
-  status: TaskStatus;
-  dueDate: string | Date | null;
-}
+import { Task, TaskStatus, TaskUpsertInput, PagedResponse } from './models/task.model';
 
 interface TaskUpsertPayload {
   title: string;
   description: string;
   status: number;
   dueDate: string | null;
-}
-
-export interface PagedResponse<T> {
-  items: T[];
-  pageIndex: number;
-  pageSize: number;
-  totalCount: number;
-  totalPages: number;
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
 }
 
 @Injectable({
@@ -59,7 +31,9 @@ export class TaskService {
     if (pageSize !== undefined) {
       params = params.set('pageSize', pageSize.toString());
     }
-    return this.http.get<PagedResponse<Task>>(this.apiUrl, { params });
+    let tasks = this.http.get<PagedResponse<Task>>(this.apiUrl, { params });
+    console.log('API Response:', );
+    return tasks;
   }
 
   getById(id: number): Observable<Task> {

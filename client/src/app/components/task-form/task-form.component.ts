@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskService, Task, TaskStatus, TaskUpsertInput } from '../../core/task.service';
+import { TaskService } from '../../core/task.service';
+import { Task, TaskStatus, TaskUpsertInput } from '../../core/models/task.model';
 
 @Component({
   selector: 'app-task-form',
