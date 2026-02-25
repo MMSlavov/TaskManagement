@@ -23,7 +23,7 @@ namespace TaskManagement.Application.Services
             return task is null ? null : MapToDto(task);
         }
 
-        public async Task<PagedResponse<TaskItemDto>> GetTasksAsync(Domain.TaskStatus? status = null, int pageNumber = 1, int pageSize = 10)
+        public async Task<PagedResponse<TaskItemDto>> GetTasksAsync(Domain.TaskStatus? status = null, int pageIndex = 1, int pageSize = 10)
         {
             var query = _dbContext.Tasks.AsNoTracking();
 
@@ -34,14 +34,14 @@ namespace TaskManagement.Application.Services
             var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             var tasks = await query
-                .Skip((pageNumber - 1) * pageSize)
+                .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(t => MapToDto(t))
                 .ToListAsync();
 
             return new PagedResponse<TaskItemDto>(
                 Items: tasks,
-                PageIndex: pageNumber,
+                PageIndex: pageIndex,
                 PageSize: pageSize,
                 TotalCount: totalCount,
                 TotalPages: totalPages
@@ -50,14 +50,7 @@ namespace TaskManagement.Application.Services
 
         public async Task<TaskItemDto> CreateTaskAsync(CreateTaskDto createTaskDto)
         {
-            var task = new TaskItem
-            {
-                Title = createTaskDto.Title,
-                Description = createTaskDto.Description,
-                DueDate = createTaskDto.DueDate,
-                Status = Domain.TaskStatus.Todo,
-                CreatedAt = DateTime.UtcNow
-            };
+            var task = new TaskItem(createTaskDto.Title, createTaskDto.Description, createTaskDto.DueDate);
 
             _dbContext.Tasks.Add(task);
             await _dbContext.SaveChangesAsync();

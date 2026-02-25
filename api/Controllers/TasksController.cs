@@ -18,16 +18,16 @@ namespace TaskManagement.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResponse<TaskItemDto>>> GetTasks(
             [FromQuery] Domain.TaskStatus? status = null,
-            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10)
         {
-            if (pageNumber < 1)
+            if (pageIndex < 1)
                 return BadRequest(new { message = "Page number must be at least 1." });
             
             if (pageSize < 1 || pageSize > 100)
                 return BadRequest(new { message = "Page size must be between 1 and 100." });
 
-            var pagedTasks = await _taskService.GetTasksAsync(status, pageNumber, pageSize);
+            var pagedTasks = await _taskService.GetTasksAsync(status, pageIndex, pageSize);
 
             return Ok(pagedTasks);
         }

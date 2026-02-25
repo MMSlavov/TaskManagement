@@ -1,5 +1,3 @@
-using TaskManagement.Domain;
-
 namespace TaskManagement.Application.DTOs
 {
     public record TaskItemDto(
@@ -7,7 +5,7 @@ namespace TaskManagement.Application.DTOs
         string Title,
         string? Description,
         string Status,
-        DateTime? DueDate,
+        DateTime DueDate,
         DateTime CreatedAt,
         DateTime? UpdatedAt
     );

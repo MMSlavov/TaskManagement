@@ -7,10 +7,10 @@ namespace TaskManagement.Application.DTOs
         [StringLength(200, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 200 characters.")]
         string Title,
         
-        [StringLength(2000, ErrorMessage = "Description cannot exceed 2000 characters.")]
-        string? Description = null,
-        
         [DataType(DataType.DateTime)]
-        DateTime? DueDate = null
+        DateTime DueDate,
+        
+        [StringLength(2000, ErrorMessage = "Description cannot exceed 2000 characters.")]
+        string? Description = null
     );
 }
