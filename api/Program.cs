@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TaskManagement.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
@@ -7,6 +10,9 @@ builder.Services.AddEndpointsApiExplorer();
 // Configure PostgreSQL with EF Core
 var connectionString = builder.Configuration["DATABASE_URL"]
     ?? throw new InvalidOperationException("DATABASE_URL environment variable not found");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Add Swagger (Development only)
 if (builder.Environment.IsDevelopment())
