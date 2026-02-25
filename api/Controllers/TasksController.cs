@@ -16,10 +16,20 @@ namespace TaskManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItemDto>>> GetTasks([FromQuery] Domain.TaskStatus? status = null)
+        public async Task<ActionResult<PagedResponse<TaskItemDto>>> GetTasks(
+            [FromQuery] Domain.TaskStatus? status = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var tasks = await _taskService.GetTasksAsync(status);
-            return Ok(tasks);
+            if (pageNumber < 1)
+                return BadRequest(new { message = "Page number must be at least 1." });
+            
+            if (pageSize < 1 || pageSize > 100)
+                return BadRequest(new { message = "Page size must be between 1 and 100." });
+
+            var pagedTasks = await _taskService.GetTasksAsync(status, pageNumber, pageSize);
+
+            return Ok(pagedTasks);
         }
 
         [HttpGet("{id}")]
@@ -39,6 +49,7 @@ namespace TaskManagement.Controllers
                 return BadRequest(ModelState);
 
             var createdTask = await _taskService.CreateTaskAsync(createTaskDto);
+
             return CreatedAtAction(nameof(GetTask), new { id = createdTask.Id }, createdTask);
         }
 

@@ -6,7 +6,7 @@ namespace TaskManagement.Application.DTOs
         int Id,
         string Title,
         string? Description,
-        Domain.TaskStatus Status,
+        string Status,
         DateTime? DueDate,
         DateTime CreatedAt,
         DateTime? UpdatedAt

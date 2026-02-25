@@ -23,13 +23,29 @@ namespace TaskManagement.Application.Services
             return task is null ? null : MapToDto(task);
         }
 
-        public async Task<IEnumerable<TaskItemDto>> GetTasksAsync(Domain.TaskStatus? status = null)
+        public async Task<PagedResponse<TaskItemDto>> GetTasksAsync(Domain.TaskStatus? status = null, int pageNumber = 1, int pageSize = 10)
         {
-            return await _dbContext.Tasks
-                .AsNoTracking()
-                .Where(t => !status.HasValue || t.Status == status)
+            var query = _dbContext.Tasks.AsNoTracking();
+
+            if (status.HasValue)
+                query = query.Where(t => t.Status == status);
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            var tasks = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(t => MapToDto(t))
                 .ToListAsync();
+
+            return new PagedResponse<TaskItemDto>(
+                Items: tasks,
+                PageIndex: pageNumber,
+                PageSize: pageSize,
+                TotalCount: totalCount,
+                TotalPages: totalPages
+            );
         }
 
         public async Task<TaskItemDto> CreateTaskAsync(CreateTaskDto createTaskDto)
@@ -79,7 +95,7 @@ namespace TaskManagement.Application.Services
                 task.Id,
                 task.Title,
                 task.Description,
-                task.Status,
+                task.Status.ToString(),
                 task.DueDate,
                 task.CreatedAt,
                 task.UpdatedAt
