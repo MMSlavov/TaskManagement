@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Application.Services;
 using TaskManagement.Infrastructure;
+using TaskManagement.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure HTTP pipeline
+app.UseExceptionHandling();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
